@@ -24,6 +24,9 @@ const MAX_CHAT_LENGTH = 500;
 const MAX_RECORDING_SECONDS = 120;
 const COOLDOWN_TIME = 2000;
 
+const DEMO_KEY = process.env.NEXT_PUBLIC_DEMO_INTERNAL_KEY || "";
+const demoHeaders = (): Record<string, string> => (DEMO_KEY ? { "x-demo-key": DEMO_KEY } : {});
+
 // ── Security helpers (kept identical to production) ────────────────────
 function sanitizeAiHtml(html: string): string {
   return html
@@ -255,7 +258,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
     try {
       const res = await fetch("/api/chat/save", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...demoHeaders() },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -276,7 +279,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
         addMessage({ id: Date.now().toString() + "-b", role: "assistant", content: data.content || data.message || "⚠️ Server is busy, try again." });
       }
 
-      if (res.ok) fetch("/api/chat/cleanup", { method: "POST", credentials: "same-origin" }).catch(() => {});
+      if (res.ok) fetch("/api/chat/cleanup", { method: "POST", headers: demoHeaders(), credentials: "same-origin" }).catch(() => {});
     } catch (err: any) {
       const isNetworkError = err instanceof TypeError && err.message.includes("fetch");
       addMessage({ id: Date.now().toString(), role: "assistant", content: isNetworkError ? "⚠️ Connection interrupted. Please check your internet." : "⚠️ Server busy. Try again." });
@@ -297,8 +300,10 @@ export default function ChatDemo({ userId }: { userId: string }) {
     <div className="flex h-full flex-col bg-neutral-950 text-neutral-100">
       {/* Header */}
       <header className="flex items-center gap-3 border-b border-neutral-800 px-6 py-4">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-emerald-600 font-bold text-black">L</div>
         <div>
-          <h1 className="text-sm font-semibold">AI Assistant</h1>
+          <h1 className="text-sm font-semibold">LYDRA Assistant</h1>
+          <p className="text-xs text-neutral-500">Demo · finance chat</p>
         </div>
       </header>
 
@@ -345,7 +350,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
                       dismissMessage(msg.id);
                       const text = buildConfirmationHtml(result, meta);
                       addMessage({ id: Date.now().toString(), role: "assistant", content: text });
-                      fetch("/api/chat/save-message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: text, role: "assistant" }) }).catch(() => {});
+                      fetch("/api/chat/save-message", { method: "POST", headers: { "Content-Type": "application/json", ...demoHeaders() }, body: JSON.stringify({ content: text, role: "assistant" }) }).catch(() => {});
                     }}
                   />
                 </div>
@@ -366,7 +371,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
                       dismissMessage(msg.id);
                       const text = buildConfirmationHtml(result, meta, msg.transactionCount);
                       addMessage({ id: Date.now().toString(), role: "assistant", content: text });
-                      fetch("/api/chat/save-message", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: text, role: "assistant" }) }).catch(() => {});
+                      fetch("/api/chat/save-message", { method: "POST", headers: { "Content-Type": "application/json", ...demoHeaders() }, body: JSON.stringify({ content: text, role: "assistant" }) }).catch(() => {});
                     }}
                   />
                 </div>
@@ -445,7 +450,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
                 disabled={isLoading || isRateLimited}
                 maxLength={MAX_CHAT_LENGTH}
                 rows={1}
-                placeholder={isLoading ? "AI is thinking..." : isAnyFileSelected ? "Press Enter to send file" : "Ask Oconomi..."}
+                placeholder={isLoading ? "AI is thinking..." : isAnyFileSelected ? "Press Enter to send file" : "Ask LYDRA..."}
                 className="max-h-28 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-neutral-600"
               />
               <button

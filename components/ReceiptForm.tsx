@@ -427,6 +427,10 @@ const SingleFormFields = ({ data, onChange, errors = {}, splitErrors = [] }: {
 // ─── SAVE TO DB (identical endpoint contract) ──────────────────────────────
 
 async function saveReceiptToDB(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  const DEMO_KEY = process.env.NEXT_PUBLIC_DEMO_INTERNAL_KEY || "";
+  const demoHeaders = (): Record<string, string> =>
+    DEMO_KEY ? { "x-demo-key": DEMO_KEY } : {};
+
   const hasSplits = formData.splits && formData.splits.length > 0;
   const masterTotal = parseFloat(String(formData.total_with_tax)) || 0;
 
@@ -447,7 +451,7 @@ async function saveReceiptToDB(formData: FormData): Promise<{ success: boolean; 
       };
     });
     const res = await fetch('/api/sync', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json', ...demoHeaders() },
       body: JSON.stringify({ type: 'create_receipt_batch', items })
     });
     return { success: res.ok, error: (await res.json()).error };
@@ -455,7 +459,7 @@ async function saveReceiptToDB(formData: FormData): Promise<{ success: boolean; 
 
   const res = await fetch('/api/sync', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...demoHeaders() },
     body: JSON.stringify({
       type: 'create_receipt',
       item: {
