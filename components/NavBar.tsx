@@ -13,10 +13,10 @@ export default function NavBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex h-12 flex-none items-center justify-between border-b border-neutral-800 bg-neutral-950 px-4">
+    <nav className="flex h-12 flex-none items-center justify-between border-b border-brand-border bg-brand-bg px-4">
       <div className="flex items-center gap-2">
-        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-linear-to-br from-emerald-400 to-emerald-600 text-[11px] font-bold text-black">L</div>
-        <span className="text-xs font-semibold text-neutral-300">Oconomi</span>
+        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-linear-to-br from-brand-accent to-brand-accent-dark text-[11px] font-bold text-black">O</div>
+        <span className="text-xs font-semibold text-brand-muted">Oconomi</span>
       </div>
 
       <div className="flex items-center gap-1">
@@ -27,7 +27,7 @@ export default function NavBar() {
               key={href}
               href={href}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                active ? "bg-emerald-500/15 text-emerald-400" : "text-neutral-500 hover:text-neutral-200"
+                active ? "bg-brand-accent/15 text-brand-accent" : "text-brand-muted-2 hover:text-brand-text"
               }`}
             >
               <Icon size={14} />

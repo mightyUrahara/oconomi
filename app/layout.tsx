@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LYDRA — Demo",
-  description: "LYDRA Finance demo",
+  title: "Oconomi — Demo",
+  description: "Oconomi Finance demo",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body
-        className="flex flex-col overflow-hidden bg-neutral-950"
+        className="flex flex-col overflow-hidden bg-brand-bg"
         style={{ height: "100dvh", maxHeight: "100dvh" }}
       >
         <NavBar />

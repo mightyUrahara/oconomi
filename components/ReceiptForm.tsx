@@ -89,12 +89,12 @@ interface ReceiptFormProps {
 // ─── FIELD COMPONENTS ───────────────────────────────────────────────────────
 
 const FieldLabel = ({ children }: { children: React.ReactNode }) => (
-  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wide text-neutral-500">
+  <label className="mb-1 block text-[10px] font-bold uppercase tracking-wide text-brand-muted-2">
     {children}
   </label>
 );
 
-const inputCls = "w-full rounded-lg border border-neutral-800 bg-neutral-950 px-2.5 py-2 text-[13px] text-neutral-100 outline-none focus:border-emerald-500/60";
+const inputCls = "w-full rounded-lg border border-brand-border bg-brand-inset px-2.5 py-2 text-[13px] text-brand-text outline-none focus:border-brand-accent/60";
 
 const FieldInput = ({ className, error, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { error?: boolean }) => (
   <input {...props} className={`${inputCls} ${error ? "border-red-500" : ""} ${className || ""}`} />
@@ -117,7 +117,7 @@ const CategorySelect = ({ value, flowType, onChange, error }: {
           <option value={value}>{value}</option>
         )}
       </select>
-      <ChevronDown size={13} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500" />
+      <ChevronDown size={13} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-brand-muted-2" />
     </div>
   );
 };
@@ -131,14 +131,14 @@ const CurrencySelect = ({ value, onChange }: { value: string; onChange: (v: stri
     >
       {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
     </select>
-    <ChevronDown size={13} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500" />
+    <ChevronDown size={13} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-brand-muted-2" />
   </div>
 );
 
 // ─── FLOW TOGGLE ────────────────────────────────────────────────────────────
 
 const FlowToggle = ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
-  <div className="flex gap-1 rounded-lg border border-neutral-800 bg-neutral-950 p-1">
+  <div className="flex gap-1 rounded-lg border border-brand-border bg-brand-inset p-1">
     {(['expense', 'income'] as const).map(t => (
       <button
         key={t}
@@ -146,8 +146,8 @@ const FlowToggle = ({ value, onChange }: { value: string; onChange: (v: string) 
         onClick={() => onChange(t)}
         className={`flex-1 rounded-md py-1.5 text-[11px] font-bold capitalize transition-colors ${
           value === t
-            ? t === 'income' ? "bg-emerald-500/15 text-emerald-400" : "bg-red-500/15 text-red-400"
-            : "text-neutral-500"
+            ? t === 'income' ? "bg-brand-accent/15 text-brand-accent" : "bg-red-500/15 text-red-400"
+            : "text-brand-muted-2"
         }`}
       >
         {t === 'income' ? '📈 Income' : '📉 Expense'}
@@ -180,11 +180,11 @@ const SplitRow = ({
   };
 
   return (
-    <div className={`flex flex-col gap-2 rounded-lg border bg-neutral-950 p-2.5 ${
-      splitError ? "border-red-500" : isFirst ? "border-emerald-500/30" : "border-neutral-800"
+    <div className={`flex flex-col gap-2 rounded-lg border bg-brand-inset p-2.5 ${
+      splitError ? "border-red-500" : isFirst ? "border-brand-accent/30" : "border-brand-border"
     }`}>
       <div className="flex items-center justify-between">
-        <span className={`text-[10px] font-bold uppercase ${isFirst ? "text-emerald-400" : "text-neutral-500"}`}>
+        <span className={`text-[10px] font-bold uppercase ${isFirst ? "text-brand-accent" : "text-brand-muted-2"}`}>
           Split {index + 1} {isFirst ? '(original category)' : ''}
         </span>
         {canDelete ? (
@@ -192,7 +192,7 @@ const SplitRow = ({
             <X size={13} />
           </button>
         ) : (
-          <span className="text-[9px] text-neutral-600">locked</span>
+          <span className="text-[9px] text-brand-muted-3">locked</span>
         )}
       </div>
 
@@ -212,11 +212,11 @@ const SplitRow = ({
               readOnly={isLast}
               onChange={e => handlePctChange(e.target.value)}
               placeholder="50"
-              className={`pr-7 ${isLast ? "bg-neutral-900 opacity-70" : ""}`}
+              className={`pr-7 ${isLast ? "bg-brand-surface opacity-70" : ""}`}
             />
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-neutral-500">%</span>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-brand-muted-2">%</span>
           </div>
-          <div className="mt-0.5 text-[10px] text-neutral-500">= {total > 0 ? derivedAmt : '0.00'}</div>
+          <div className="mt-0.5 text-[10px] text-brand-muted-2">= {total > 0 ? derivedAmt : '0.00'}</div>
         </div>
       </div>
 
@@ -377,15 +377,15 @@ const SingleFormFields = ({ data, onChange, errors = {}, splitErrors = [] }: {
 
         <div className="flex flex-col gap-1">
           <FieldLabel>Workspace Context</FieldLabel>
-          <div className="flex h-8.75 items-center justify-center gap-3 rounded-lg border border-neutral-800 bg-neutral-950 px-2">
-            <span onClick={() => onChange({ ...data, workspace: 'personal' })} className={`cursor-pointer text-xs font-semibold transition-colors ${!isBusiness ? "text-emerald-400" : "text-neutral-500"}`}>Personal</span>
+          <div className="flex h-8.75 items-center justify-center gap-3 rounded-lg border border-brand-border bg-brand-inset px-2">
+            <span onClick={() => onChange({ ...data, workspace: 'personal' })} className={`cursor-pointer text-xs font-semibold transition-colors ${!isBusiness ? "text-brand-accent" : "text-brand-muted-2"}`}>Personal</span>
             <label className="inline-flex cursor-pointer items-center">
               <input type="checkbox" className="sr-only" checked={isBusiness} onChange={(e) => onChange({ ...data, workspace: e.target.checked ? 'business' : 'personal' })} />
-              <div className={`relative h-5.5 w-10.5 rounded-full transition-colors ${isBusiness ? "bg-emerald-500" : "bg-neutral-700"}`}>
+              <div className={`relative h-5.5 w-10.5 rounded-full transition-colors ${isBusiness ? "bg-brand-accent" : "bg-brand-border"}`}>
                 <div className={`absolute top-0.5 h-4.5 w-4.5 rounded-full transition-all ${isBusiness ? "left-5.5 bg-black" : "left-0.5 bg-white"}`} />
               </div>
             </label>
-            <span onClick={() => onChange({ ...data, workspace: 'business' })} className={`cursor-pointer text-xs font-semibold transition-colors ${isBusiness ? "text-emerald-400" : "text-neutral-500"}`}>Business</span>
+            <span onClick={() => onChange({ ...data, workspace: 'business' })} className={`cursor-pointer text-xs font-semibold transition-colors ${isBusiness ? "text-brand-accent" : "text-brand-muted-2"}`}>Business</span>
           </div>
         </div>
       </div>
@@ -397,7 +397,7 @@ const SingleFormFields = ({ data, onChange, errors = {}, splitErrors = [] }: {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <div className="text-[10px] font-bold uppercase tracking-wide text-neutral-500">Category Splits ({splits.length})</div>
+              <div className="text-[10px] font-bold uppercase tracking-wide text-brand-muted-2">Category Splits ({splits.length})</div>
               <button type="button" onClick={addSplit} className="flex items-center gap-1 rounded-md border border-red-400/70 px-2 py-1 text-[11px] text-red-400">
                 <Plus size={11} /> Add
               </button>
@@ -411,7 +411,7 @@ const SingleFormFields = ({ data, onChange, errors = {}, splitErrors = [] }: {
 
       <div className="pb-3">
         {!hasSplit ? (
-          <button type="button" onClick={addSplitMode} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-neutral-700 py-2 text-xs text-neutral-500 transition-colors hover:border-emerald-500 hover:text-emerald-400">
+          <button type="button" onClick={addSplitMode} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-brand-border py-2 text-xs text-brand-muted-2 transition-colors hover:border-brand-accent hover:text-brand-accent">
             <Plus size={13} /> Split Category
           </button>
         ) : (
@@ -428,8 +428,7 @@ const SingleFormFields = ({ data, onChange, errors = {}, splitErrors = [] }: {
 
 async function saveReceiptToDB(formData: FormData): Promise<{ success: boolean; error?: string }> {
   const DEMO_KEY = process.env.NEXT_PUBLIC_DEMO_INTERNAL_KEY || "";
-  const demoHeaders = (): Record<string, string> =>
-    DEMO_KEY ? { "x-demo-key": DEMO_KEY } : {};
+  const demoHeaders = (): Record<string, string> => (DEMO_KEY ? { "x-demo-key": DEMO_KEY } : {});
 
   const hasSplits = formData.splits && formData.splits.length > 0;
   const masterTotal = parseFloat(String(formData.total_with_tax)) || 0;
@@ -483,7 +482,7 @@ async function saveReceiptToDB(formData: FormData): Promise<{ success: boolean; 
 const Toast = ({ message, type, toastPosition = 'center' }: { message: string; type: 'success' | 'error'; toastPosition?: 'center' | 'bottom-right' }) => (
   <div
     className={`fixed z-9999 whitespace-nowrap rounded-full border px-4 py-2 text-[13px] font-semibold shadow-lg ${
-      type === 'success' ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-400" : "border-red-500/40 bg-red-500/15 text-red-400"
+      type === 'success' ? "border-brand-accent/40 bg-brand-accent/15 text-brand-accent" : "border-red-500/40 bg-red-500/15 text-red-400"
     } ${toastPosition === 'bottom-right' ? "bottom-6 right-6 max-[768px]:hidden" : "bottom-20 left-1/2 -translate-x-1/2"}`}
   >
     {message}
@@ -643,24 +642,24 @@ export function ReceiptForm({
     <>
       {toast && <Toast message={toast.message} type={toast.type} toastPosition={toastPosition} />}
 
-      <div className="w-full max-w-105 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-xl">
+      <div className="w-full max-w-105 overflow-hidden rounded-2xl border border-brand-border bg-brand-surface shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-neutral-800 px-3.5 py-3">
+        <div className="flex items-center justify-between border-b border-brand-border px-3.5 py-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-sm">🧾</div>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-accent/10 text-sm">🧾</div>
             <div>
-              <div className="text-[13px] font-bold text-neutral-100">{isBatch ? 'Batch Import' : (formTitle ?? 'Review Transaction')}</div>
-              {isBatch && <div className="text-[10px] text-neutral-500">{savedCount} saved · {pendingCount} pending · {deletedCount} removed</div>}
+              <div className="text-[13px] font-bold text-brand-text">{isBatch ? 'Batch Import' : (formTitle ?? 'Review Transaction')}</div>
+              {isBatch && <div className="text-[10px] text-brand-muted-2">{savedCount} saved · {pendingCount} pending · {deletedCount} removed</div>}
             </div>
           </div>
 
           {isBatch && (
             <div className="flex items-center gap-1.5">
-              <button type="button" onClick={() => goTo(-1)} disabled={currentIndex === 0} className="flex rounded-md border border-neutral-800 bg-neutral-950 p-1 text-neutral-500 disabled:opacity-30">
+              <button type="button" onClick={() => goTo(-1)} disabled={currentIndex === 0} className="flex rounded-md border border-brand-border bg-brand-inset p-1 text-brand-muted-2 disabled:opacity-30">
                 <ChevronLeft size={14} />
               </button>
-              <span className="min-w-10 text-center text-[11px] font-bold text-neutral-200">{currentIndex + 1} / {batchItems.length}</span>
-              <button type="button" onClick={() => goTo(1)} disabled={currentIndex === batchItems.length - 1} className="flex rounded-md border border-neutral-800 bg-neutral-950 p-1 text-neutral-500 disabled:opacity-30">
+              <span className="min-w-10 text-center text-[11px] font-bold text-brand-text">{currentIndex + 1} / {batchItems.length}</span>
+              <button type="button" onClick={() => goTo(1)} disabled={currentIndex === batchItems.length - 1} className="flex rounded-md border border-brand-border bg-brand-inset p-1 text-brand-muted-2 disabled:opacity-30">
                 <ChevronRight size={14} />
               </button>
             </div>
@@ -678,7 +677,7 @@ export function ReceiptForm({
         {/* Batch status pill */}
         {isBatch && currentItem && currentItem.status !== 'pending' && (
           <div className={`mx-3 mt-2.5 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold ${
-            currentItem.status === 'saved' ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400" : "border-red-500/20 bg-red-500/10 text-red-400"
+            currentItem.status === 'saved' ? "border-brand-accent/30 bg-brand-accent/10 text-brand-accent" : "border-red-500/20 bg-red-500/10 text-red-400"
           }`}>
             {currentItem.status === 'saved' ? <><Check size={13} /> Saved</> : <><X size={13} /> Removed</>}
           </div>
@@ -699,13 +698,13 @@ export function ReceiptForm({
         </div>
 
         {/* Footer */}
-        <div className="flex flex-col gap-2 border-t border-neutral-800 px-3 py-3">
+        <div className="flex flex-col gap-2 border-t border-brand-border px-3 py-3">
           {!isBatch && (
             <div className="grid grid-cols-[1fr_2fr] gap-2">
-              <button type="button" onClick={handleSingleDiscard} className="flex items-center justify-center gap-1.5 rounded-lg border border-neutral-800 py-2.5 text-[13px] font-semibold text-neutral-400">
+              <button type="button" onClick={handleSingleDiscard} className="flex items-center justify-center gap-1.5 rounded-lg border border-brand-border py-2.5 text-[13px] font-semibold text-brand-muted">
                 <Trash2 size={14} /> Discard
               </button>
-              <button type="button" onClick={handleSingleSave} disabled={singleSaving} className={`flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[13px] font-bold transition-colors ${singleSaving ? "bg-neutral-800 text-neutral-500" : "bg-emerald-500 text-black"}`}>
+              <button type="button" onClick={handleSingleSave} disabled={singleSaving} className={`flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[13px] font-bold transition-colors ${singleSaving ? "bg-brand-border text-brand-muted-2" : "bg-brand-accent text-black"}`}>
                 {singleSaving ? '⏳ Saving...' : <><Check size={14} /> Save</>}
               </button>
             </div>
@@ -716,20 +715,20 @@ export function ReceiptForm({
               <button type="button" onClick={() => handleBatchDeleteOne(currentIndex)} className="flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 py-2 text-xs font-semibold text-red-400">
                 <Trash2 size={13} /> Remove
               </button>
-              <button type="button" onClick={() => handleBatchSaveOne(currentIndex)} className="flex items-center justify-center gap-1.5 rounded-lg bg-emerald-500/15 py-2 text-xs font-bold text-emerald-400">
+              <button type="button" onClick={() => handleBatchSaveOne(currentIndex)} className="flex items-center justify-center gap-1.5 rounded-lg bg-brand-accent/15 py-2 text-xs font-bold text-brand-accent">
                 <Save size={13} /> Save This
               </button>
             </div>
           )}
 
           {isBatch && pendingCount > 0 && (
-            <button type="button" onClick={handleSaveAll} disabled={batchSaving} className={`flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[13px] font-extrabold transition-colors ${batchSaving ? "bg-neutral-800 text-neutral-500" : "bg-emerald-500 text-black"}`}>
+            <button type="button" onClick={handleSaveAll} disabled={batchSaving} className={`flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[13px] font-extrabold transition-colors ${batchSaving ? "bg-brand-border text-brand-muted-2" : "bg-brand-accent text-black"}`}>
               {batchSaving ? '⏳ Saving all...' : <><Check size={15} /> Save Remaining ({pendingCount})</>}
             </button>
           )}
 
           {isBatch && pendingCount === 0 && (
-            <div className="py-1 text-center text-xs text-neutral-500">All receipts processed — {savedCount} saved, {deletedCount} removed.</div>
+            <div className="py-1 text-center text-xs text-brand-muted-2">All receipts processed — {savedCount} saved, {deletedCount} removed.</div>
           )}
         </div>
       </div>

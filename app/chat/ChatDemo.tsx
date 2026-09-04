@@ -116,7 +116,7 @@ function AudioBubble({ src }: { src: string }) {
   const [progress, setProgress] = useState(0);
 
   return (
-    <div className="flex items-center gap-2 rounded-2xl border border-emerald-400/40 bg-neutral-900 px-3 py-2 w-56">
+    <div className="flex items-center gap-2 rounded-2xl border border-brand-accent/40 bg-brand-surface px-3 py-2 w-56">
       <audio
         ref={ref}
         src={src}
@@ -128,7 +128,7 @@ function AudioBubble({ src }: { src: string }) {
       <button
         type="button"
         onClick={() => (playing ? ref.current?.pause() : ref.current?.play())}
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-black"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-accent text-black"
       >
         {playing ? <Pause size={12} /> : <Play size={12} />}
       </button>
@@ -141,7 +141,7 @@ function AudioBubble({ src }: { src: string }) {
           if (ref.current) ref.current.currentTime = (Number(e.target.value) / 100) * (ref.current.duration || 0);
           setProgress(Number(e.target.value));
         }}
-        className="h-1 flex-1 accent-emerald-500"
+        className="h-1 flex-1 accent-brand-accent"
       />
     </div>
   );
@@ -297,21 +297,21 @@ export default function ChatDemo({ userId }: { userId: string }) {
   };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-neutral-950 text-neutral-100">
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-brand-bg text-brand-text">
       {/* Header */}
-      <header className="flex flex-none items-center gap-3 border-b border-neutral-800 px-6 py-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-emerald-600 font-bold text-black">L</div>
+      <header className="flex flex-none items-center gap-3 border-b border-brand-border px-6 py-4">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-brand-accent to-brand-accent-dark font-bold text-black">O</div>
         <div>
-          <h1 className="text-sm font-semibold">LYDRA Assistant</h1>
-          <p className="text-xs text-neutral-500">Demo · finance chat</p>
+          <h1 className="text-sm font-semibold">Oconomi Assistant</h1>
+          <p className="text-xs text-brand-muted-2">Demo · finance chat</p>
         </div>
       </header>
 
       {/* Messages */}
       <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-6 py-6">
         {messages.length === 0 && !isLoading && (
-          <div className="flex h-full flex-col items-center justify-center text-neutral-500">
-            <Bot size={28} className="mb-3 text-emerald-500" />
+          <div className="flex h-full flex-col items-center justify-center text-brand-muted-2">
+            <Bot size={28} className="mb-3 text-brand-accent" />
             <p className="text-sm">Send a message to get started</p>
           </div>
         )}
@@ -321,15 +321,15 @@ export default function ChatDemo({ userId }: { userId: string }) {
             return (
               <div key={msg.id || i} className="flex justify-end">
                 <div className="flex max-w-[60%] flex-col items-end gap-2">
-                  {msg.image && !isAudioData(msg.image) && <img src={msg.image} alt="upload" className="max-h-72 rounded-xl border-2 border-emerald-500 object-cover" />}
+                  {msg.image && !isAudioData(msg.image) && <img src={msg.image} alt="upload" className="max-h-72 rounded-xl border-2 border-brand-accent object-cover" />}
                   {msg.audio && <AudioBubble src={msg.audio} />}
                   {msg.pdf && (
-                    <div className="flex items-center gap-2 rounded-xl border border-emerald-500 bg-neutral-900 px-4 py-2">
-                      <FileText size={18} className="text-emerald-500" /><span className="text-sm">{msg.pdf.name}</span>
+                    <div className="flex items-center gap-2 rounded-xl border border-brand-accent bg-brand-surface px-4 py-2">
+                      <FileText size={18} className="text-brand-accent" /><span className="text-sm">{msg.pdf.name}</span>
                     </div>
                   )}
                   {msg.content && !isMediaPlaceholder(msg.content) && (
-                    <div className="rounded-2xl rounded-tr-sm bg-emerald-500 px-4 py-2 text-sm text-black">{msg.content}</div>
+                    <div className="rounded-2xl rounded-tr-sm bg-brand-accent px-4 py-2 text-sm text-black">{msg.content}</div>
                   )}
                 </div>
               </div>
@@ -381,7 +381,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
 
           return (
             <div key={msg.id || i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[60%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${msg.role === "user" ? "rounded-tr-sm bg-emerald-500 text-black" : "rounded-tl-sm border border-neutral-800 bg-neutral-900 text-neutral-100"}`}>
+              <div className={`max-w-[60%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${msg.role === "user" ? "rounded-tr-sm bg-brand-accent text-black" : "rounded-tl-sm border border-brand-border bg-brand-surface text-brand-text"}`}>
                 {msg.role === "user" ? <span>{msg.content}</span> : <div dangerouslySetInnerHTML={{ __html: sanitizeAiHtml(msg.content) }} />}
               </div>
             </div>
@@ -389,7 +389,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
         })}
 
         {isLoading && (
-          <div className="inline-flex items-center gap-2 rounded-full border border-neutral-800 bg-neutral-900 px-4 py-2 text-xs text-neutral-400">
+          <div className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-brand-surface px-4 py-2 text-xs text-brand-muted">
             <Loader2 size={14} className="animate-spin" /> Thinking...
           </div>
         )}
@@ -397,7 +397,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
       </div>
 
       {/* Input bar */}
-      <div className="flex-none border-t border-neutral-800 bg-neutral-950 px-6 py-4">
+      <div className="flex-none border-t border-brand-border bg-brand-bg px-6 py-4">
         {input.length > MAX_CHAT_LENGTH * 0.7 && (
           <div className={`mb-1 text-right text-xs ${input.length > MAX_CHAT_LENGTH * 0.9 ? "text-red-500" : "text-amber-500"}`}>{input.length}/{MAX_CHAT_LENGTH}</div>
         )}
@@ -405,25 +405,25 @@ export default function ChatDemo({ userId }: { userId: string }) {
         {(selectedImage || selectedPDF || selectedAudio) && (
           <div className="mb-2 flex gap-2">
             {selectedImage && (
-              <div className="flex items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs">
+              <div className="flex items-center gap-2 rounded-xl border border-brand-border bg-brand-surface px-3 py-1.5 text-xs">
                 <img src={selectedImage} className="h-6 w-6 rounded object-cover" alt="preview" /><span>Image</span>
                 <X size={14} className="cursor-pointer" onClick={() => setSelectedImage(null)} />
               </div>
             )}
             {selectedPDF && (
-              <div className="flex items-center gap-2 rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-1.5 text-xs">
+              <div className="flex items-center gap-2 rounded-xl border border-brand-border bg-brand-surface px-3 py-1.5 text-xs">
                 <FileText size={14} /><span>PDF</span><X size={14} className="cursor-pointer" onClick={() => setSelectedPDF(null)} />
               </div>
             )}
             {selectedAudio && (
-              <div className="flex items-center gap-2 rounded-xl border border-emerald-500 bg-neutral-900 px-3 py-1.5 text-xs">
+              <div className="flex items-center gap-2 rounded-xl border border-brand-accent bg-brand-surface px-3 py-1.5 text-xs">
                 <span>Voice Note</span><X size={14} className="cursor-pointer" onClick={() => setSelectedAudio(null)} />
               </div>
             )}
           </div>
         )}
 
-        <div className="flex items-center gap-1 rounded-2xl border border-neutral-800 bg-neutral-900 px-2 py-1">
+        <div className="flex items-center gap-1 rounded-2xl border border-brand-border bg-brand-surface px-2 py-1">
           <input type="file" ref={fileInputRef} hidden accept="image/*,application/pdf" onChange={handleFileSelect} />
 
           {isRecording ? (
@@ -435,10 +435,10 @@ export default function ChatDemo({ userId }: { userId: string }) {
             </div>
           ) : (
             <>
-              <button type="button" className="flex h-9 w-9 items-center justify-center rounded-xl text-neutral-500 hover:text-neutral-200 disabled:opacity-30" disabled={input.length > 0 || isLoading || isRateLimited} onClick={() => fileInputRef.current?.click()}>
+              <button type="button" className="flex h-9 w-9 items-center justify-center rounded-xl text-brand-muted-2 hover:text-brand-text disabled:opacity-30" disabled={input.length > 0 || isLoading || isRateLimited} onClick={() => fileInputRef.current?.click()}>
                 <Paperclip size={18} />
               </button>
-              <button type="button" className="flex h-9 w-9 items-center justify-center rounded-xl text-neutral-500 hover:text-neutral-200 disabled:opacity-30" disabled={input.length > 0 || isLoading || isRateLimited} onClick={startRecording}>
+              <button type="button" className="flex h-9 w-9 items-center justify-center rounded-xl text-brand-muted-2 hover:text-brand-text disabled:opacity-30" disabled={input.length > 0 || isLoading || isRateLimited} onClick={startRecording}>
                 <Mic size={18} />
               </button>
               <textarea
@@ -450,14 +450,14 @@ export default function ChatDemo({ userId }: { userId: string }) {
                 disabled={isLoading || isRateLimited}
                 maxLength={MAX_CHAT_LENGTH}
                 rows={1}
-                placeholder={isLoading ? "AI is thinking..." : isAnyFileSelected ? "Press Enter to send file" : "Ask LYDRA..."}
-                className="max-h-28 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-neutral-600"
+                placeholder={isLoading ? "AI is thinking..." : isAnyFileSelected ? "Press Enter to send file" : "Ask Oconomi..."}
+                className="max-h-28 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-brand-muted-3"
               />
               <button
                 type="button"
                 onClick={(e) => sendMessage(e)}
                 disabled={(!input.trim() && !isAnyFileSelected) || isLoading || isRateLimited}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-black disabled:bg-neutral-800 disabled:text-neutral-600"
+                className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-accent text-black disabled:bg-brand-border disabled:text-brand-muted-3"
               >
                 {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
               </button>

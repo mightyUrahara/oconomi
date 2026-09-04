@@ -3,14 +3,40 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* ── Brand palette — edit these to retheme the whole app ── */
+  --brand-bg: #0f0a0a;        /* page background */
+  --brand-surface: #1a1414;   /* cards, panels, message bubbles */
+  --brand-inset: #070505;     /* recessed inputs, nested fields */
+  --brand-border: #2e2626;    /* dividers, card borders */
+  --brand-accent: #82d173;    /* primary accent — buttons, links, active states */
+  --brand-accent-dark: #5fae52; /* accent hover / gradient end */
+  --brand-text: #f0e6dd;      /* primary text */
+  --brand-muted: #a89a8f;     /* secondary text, inactive nav */
+  --brand-muted-2: #7d6f64;   /* labels, icons */
+  --brand-muted-3: #5c5049;   /* placeholders, disabled */
 }
 
+/* Tailwind CSS v4 directive; it is processed by Tailwind/PostCSS. */
+/* stylelint-disable at-rule-no-unknown */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-inset: var(--brand-inset);
+  --color-brand-border: var(--brand-border);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-dark: var(--brand-accent-dark);
+  --color-brand-text: var(--brand-text);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-muted-2: var(--brand-muted-2);
+  --color-brand-muted-3: var(--brand-muted-3);
 }
+/* stylelint-enable at-rule-no-unknown */
 
 @media (prefers-color-scheme: dark) {
   :root {
