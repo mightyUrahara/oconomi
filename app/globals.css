@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Hard viewport lock — belt-and-suspenders alongside the inline style on
+   <body> in layout.tsx. Prevents the page itself from ever growing taller
+   than the visible viewport, regardless of flexbox edge cases. */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}

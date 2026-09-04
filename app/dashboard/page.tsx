@@ -13,8 +13,7 @@ export default async function DashboardPage() {
     orderBy: { receipt_date: "desc" },
   });
 
-  const expenses = rawReceipts.map(
-    (r: Awaited<ReturnType<typeof prisma.receipts.findMany>>[number]) => ({
+  const expenses = rawReceipts.map((r) => ({
     id: r.id,
     receipt_date: r.receipt_date
       // Lock to noon UTC so no timezone shifts the day backward, same fix
@@ -28,11 +27,10 @@ export default async function DashboardPage() {
     currency: r.currency || "USD",
     flow_type: (r.flow_type as "income" | "expense") || "expense",
     payment_method: r.payment_method || undefined,
-    }),
-  );
+  }));
 
   const ratesData = await prisma.rates.findMany();
-  const rates = (ratesData as Array<{ currency: string; rate: unknown }>).reduce<Record<string, number>>((acc, item) => {
+  const rates = ratesData.reduce((acc, item) => {
     acc[item.currency] = Number(item.rate);
     return acc;
   }, {} as Record<string, number>);

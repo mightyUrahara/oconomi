@@ -169,7 +169,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
 
   const isAnyFileSelected = !!selectedImage || !!selectedPDF || !!selectedAudio;
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, isLoading]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" }); }, [messages, isLoading]);
 
   const addMessage = (m: Message) => setMessages((prev) => [...prev, m]);
   const dismissMessage = (id: string) => setDismissedIds((prev) => new Set([...prev, id]));
@@ -297,9 +297,9 @@ export default function ChatDemo({ userId }: { userId: string }) {
   };
 
   return (
-    <div className="flex h-full flex-col bg-neutral-950 text-neutral-100">
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-neutral-950 text-neutral-100">
       {/* Header */}
-      <header className="flex items-center gap-3 border-b border-neutral-800 px-6 py-4">
+      <header className="flex flex-none items-center gap-3 border-b border-neutral-800 px-6 py-4">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-emerald-600 font-bold text-black">L</div>
         <div>
           <h1 className="text-sm font-semibold">LYDRA Assistant</h1>
@@ -308,7 +308,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
       </header>
 
       {/* Messages */}
-      <div className="flex-1 space-y-4 overflow-y-auto px-6 py-6">
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-6 py-6">
         {messages.length === 0 && !isLoading && (
           <div className="flex h-full flex-col items-center justify-center text-neutral-500">
             <Bot size={28} className="mb-3 text-emerald-500" />
@@ -397,7 +397,7 @@ export default function ChatDemo({ userId }: { userId: string }) {
       </div>
 
       {/* Input bar */}
-      <div className="border-t border-neutral-800 bg-neutral-950 px-6 py-4">
+      <div className="flex-none border-t border-neutral-800 bg-neutral-950 px-6 py-4">
         {input.length > MAX_CHAT_LENGTH * 0.7 && (
           <div className={`mb-1 text-right text-xs ${input.length > MAX_CHAT_LENGTH * 0.9 ? "text-red-500" : "text-amber-500"}`}>{input.length}/{MAX_CHAT_LENGTH}</div>
         )}

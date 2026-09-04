@@ -44,7 +44,7 @@ function inPeriod(date: Date, period: (typeof PERIODS)[number]) {
 export default function DashboardDemo({
   expenses, rates, baseCurrency = "USD",
 }: { expenses: Txn[]; rates: Record<string, number>; baseCurrency?: string }) {
-  const [period, setPeriod] = useState<(typeof PERIODS)[number]>("This Month");
+  const [period, setPeriod] = useState<(typeof PERIODS)[number]>("All Time");
   const [flowType, setFlowType] = useState<"all" | "expense" | "income">("all");
   const [category, setCategory] = useState<string>("all");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
@@ -110,7 +110,7 @@ export default function DashboardDemo({
   const categoryOptions = flowType === "income" ? INCOME_CATEGORIES : flowType === "expense" ? EXPENSE_CATEGORIES : [...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES];
 
   return (
-    <div className="h-full min-h-full overflow-y-auto bg-neutral-950 text-neutral-100">
+    <div className="min-h-0 flex-1 overflow-y-auto bg-neutral-950 text-neutral-100">
       <header className="flex items-center justify-between border-b border-neutral-800 px-6 py-4">
         <div>
           <h1 className="text-lg font-semibold">Dashboard</h1>
@@ -207,7 +207,7 @@ export default function DashboardDemo({
                   <Pie data={stats.categoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={55} outerRadius={90} paddingAngle={2}>
                     {stats.categoryData.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
                   </Pie>
-                  <Tooltip formatter={(v) => fmt(Number(v ?? 0))} contentStyle={{ background: "#171717", border: "1px solid #262626", borderRadius: 8, fontSize: 12 }} />
+                  <Tooltip formatter={(v: number) => fmt(v)} contentStyle={{ background: "#171717", border: "1px solid #262626", borderRadius: 8, fontSize: 12 }} />
                 </PieChart>
               </ResponsiveContainer>
             )}
@@ -223,7 +223,7 @@ export default function DashboardDemo({
                   <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
                   <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#737373" }} />
                   <YAxis tick={{ fontSize: 11, fill: "#737373" }} />
-                  <Tooltip formatter={(v) => fmt(Number(v ?? 0))} contentStyle={{ background: "#171717", border: "1px solid #262626", borderRadius: 8, fontSize: 12 }} />
+                  <Tooltip formatter={(v: number) => fmt(v)} contentStyle={{ background: "#171717", border: "1px solid #262626", borderRadius: 8, fontSize: 12 }} />
                   <Bar dataKey="expense" fill="#ef4444" radius={[4, 4, 0, 0]} />
                   <Bar dataKey="income" fill="#10b981" radius={[4, 4, 0, 0]} />
                 </BarChart>
