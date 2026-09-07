@@ -1,119 +1,79 @@
-# Oconomi — Demo
+# Oconomi
 
-A stripped-down MVP demo of LYDRA Finance: a chat interface that extracts receipts/transactions via AI, and a dashboard that visualizes them. No auth, no multi-user — everything runs as a single fixed demo account so anyone can clone this and have it working in a few minutes.
+**An AI Finance Assistant that replaces manual bookkeeping.**
 
----
-
-## 1. Clone the repo
-
-```bash
-git clone https://github.com/mightyUrahara/oconomi.git
-cd oconomi
-```
+Oconomi is an AI-powered financial intelligence assistant that helps people understand and manage their finances without manual bookkeeping. Add income and expenses through text, voice, images, or PDFs — AI converts each one into a structured financial record: amount, merchant, category, date, currency, and tags. Then just ask your own finances a question, in plain English, and get an answer grounded in your real data.
 
 ---
 
-## 2. Install dependencies
+## What it does
 
-```bash
-npm install
-```
+AI converts receipts, voice notes, screenshots, and PDFs into clean expense/income records — no manual data entry required.
 
-> ⚠️ **Pin check:** if `npx prisma --version` ever prints something with `-rc` or `-dev` in it (e.g. `8.0.0-rc.9-dev.xx`), npm pulled a Prisma prerelease. Fix with:
-> ```bash
-> npm uninstall prisma @prisma/client
-> npm install prisma@5.22.0 @prisma/client@5.22.0 --save-exact
-> ```
-> This repo's `package.json` already pins `5.22.0`, so a fresh `npm install` from this repo shouldn't hit this — this note is here in case anyone bumps the version later.
+## Who it's for
 
----
+Individuals and small businesses who want their finances tracked and explained, without spreadsheets.
 
-## 3. Get the `.env` file
+## What we built
 
-This is a shared demo — the database, n8n webhook, and demo account are already set up. Just grab the `.env` file from whoever shared this repo with you and drop it in the project root (same folder as `package.json`). No Supabase or Prisma setup needed on your end — everything already points at the shared demo database.
+A working AI extraction pipeline, a finance-assistant chat, and a full web dashboard — live for this demo.
 
 ---
 
-## 4. GitHub access
+## From any input, to a clean financial record
 
-You've been added as a collaborator on the GitHub repo — no Vercel account needed on your end. The repo is connected to Vercel, so any commit pushed to `main` auto-deploys there automatically; you don't need to do anything for that to happen.
+Four input modes feed one AI pipeline. The user always reviews before anything is saved.
 
-1. Accept the GitHub invite (check your email, or ask for the repo link if you haven't already)
-2. Clone it (§1 above) and you're set
+- 📷 **Photo / Receipt**
+- 🖼️ **Screenshot / Image**
+- 🎙️ **Voice note**
+- 💬 **Chat / free text**
 
-For local dev, none of this matters — just run it as described below.
+Each one goes through the **AI Extraction Engine**, which reads any input and structures it into amount, merchant, category, date, currency, and tags.
 
----
-
-## 5. Run it
-
-```bash
-npm run dev
-```
-
-Open `http://localhost:3000` — it redirects to `/dashboard`. Use the nav bar to switch to `/chat`.
-
-**Smoke test order:**
-1. `/chat` loads with empty state
-2. Send a plain text message → confirms `/api/chat/save` → n8n round-trip
-3. Upload a receipt image → a form should appear → Save → confirms `/api/sync` write
-4. `/dashboard` → the saved receipt should show up (defaults to "All Time" filter so nothing's hidden)
+**Built-in safeguards:**
+- **User-in-the-loop review** — every extraction is shown to the user for confirmation or edits before anything is saved to their history.
+- **Duplicate detection** — incoming records are checked against existing transactions so the same receipt is never logged twice.
+- **Multi-receipt / multi-batch** — one photo, PDF, or message can contain several receipts or line items; the AI splits them into separate records automatically.
 
 ---
 
-## Project structure
+## Ask your finances a question — in plain English
 
-```
-app/
-  page.tsx                     # redirects "/" → "/dashboard"
-  layout.tsx                   # root layout, NavBar, viewport lock
-  globals.css                  # theme tokens (colors) — edit here to retheme the whole app
+The assistant sits on top of the user's real transaction data. It's not a static chatbot — it's a data-grounded reasoning layer.
 
-  chat/
-    page.tsx                   # server wrapper, sets DEMO_USER_ID
-    ChatDemo.tsx                # chat UI: text/image/audio/pdf upload, message rendering
+> **"How much did I spend on food this month?"**
+> You spent $612 on Food & Dining this month — $340 personal, $272 business. That's 18% higher than last month, mostly from delivery orders.
 
-  dashboard/
-    page.tsx                   # server component — fetches receipts + rates from Supabase via Prisma
-    DashboardDemo.tsx           # dashboard UI: summary boxes, charts, filters, transaction list
+> **"Compare that to Amazon spend"**
+> You've spent $460 on Amazon total — $340 personal, $120 business, across both workspaces.
 
-  api/
-    chat/save/route.ts          # main chat send → n8n → DB
-    chat/cleanup/route.ts       # trims chat_messages to last 50
-    chat/save-message/route.ts  # persists a message (used after receipt form submit)
-    sync/route.ts               # create_receipt / create_receipt_batch → writes to `receipts`
-
-  lib/
-    prisma.ts                   # Prisma client singleton
-    rateLimit.ts                 # in-memory rate limiter (demo-grade, resets on restart)
-    validation.ts                 # sanitizeForAI / sanitizeInput helpers
-
-components/
-  NavBar.tsx                    # top nav — Chat / Dashboard links
-  ReceiptForm.tsx                # receipt review/edit form — single + batch modes, splits, save to /api/sync
-
-prisma/
-  schema.prisma                 # user / chat_messages / receipts / rates models
-```
+**What the assistant can do:**
+- **Totals, comparisons & breakdowns** — spend by merchant, category, time range, or workspace, always pulled live from real records, never estimated.
+- **Multi-currency aware** — converts and sums cleanly across currencies using live FX rates, without mixing up native amounts.
+- **Personal vs. business workspaces** — every question can be scoped to personal, business, or both — one assistant, separate books.
+- **Grounded, not guessed** — every number comes from a query against the user's actual data; the AI never calculates from memory.
 
 ---
 
-## Known demo limitations
+## One web app: dashboard, filters, and AI chat
 
-- **No real auth** — every request runs as the fixed `DEMO_USER_ID`. Set `DEMO_INTERNAL_KEY` + `NEXT_PUBLIC_DEMO_INTERNAL_KEY` before sharing a public link, or anyone with the URL can write to the DB / trigger n8n calls.
-- **Rate limiting is in-memory** — resets on every server restart/redeploy, not shared across serverless instances. Fine for a demo, not production-grade.
-- **No chat history persistence on load** — chat always starts empty (by design, out of MVP scope).
-- **No manual entry, export/import, or receipt image viewer** — intentionally stripped from the original production dashboard for this MVP.
+What we built and demoed — a live web dashboard backed by the same AI system.
+
+- **Total Expenses / Total Income / Net** — always current, always reflecting real data
+- **Filters** — Workspace • Category • Merchant • Date range • Currency
+- **Transaction History** — every record the AI extracted, in one place
+- **AI Chat** — ask a question, drop a receipt, get an answer — side by side with the dashboard
 
 ---
 
-## Troubleshooting
+## Scaling the AI system beyond the MVP
 
-**`npx prisma generate` / `db push` says "Unknown command"**
-You have a Prisma prerelease installed. See the pin-check note in §2.
+The MVP proves the core loop works — extraction, review, and reasoning. Scaling means making that AI loop faster, smarter, and safer at volume.
 
-**Dashboard shows no data even though receipts exist in Supabase**
-Check the active period filter — it defaults to "All Time" in this repo, but if it's been changed to something like "This Month", older test receipts won't show. Also double check `DEMO_USER_ID` in `.env` matches the `user_id` on the receipt rows exactly.
-
-**`/api/chat/save` or `/api/sync` returns 401**
-`DEMO_INTERNAL_KEY` is set but `NEXT_PUBLIC_DEMO_INTERNAL_KEY` isn't (or they don't match). Both need the same value, and a full server restart is required after changing `NEXT_PUBLIC_*` vars (hot reload doesn't pick them up).
+- **Proactive AI insights** — move from answering questions to surfacing them first: anomaly detection, budget alerts, and spend forecasts pushed to the user.
+- **On-demand query tools over static context** — replace fixed data blobs with live, on-demand SQL tools so the AI scales to years of history without losing accuracy.
+- **Mobile-first capture** — iOS & Android apps for instant receipt capture and voice logging, syncing into the same AI pipeline in real time.
+- **Enterprise-grade security** — workspace-level data isolation, prompt-injection hardening, and audit trails as usage — and stakes — grow.
+- **Multi-user & team workspaces** — shared business workspaces with role-based access, so the assistant reasons over a whole team's finances, not just one user's.
+- **Smarter extraction models** — continual fine-tuning on real receipt data to push accuracy higher and cut manual correction toward zero.
